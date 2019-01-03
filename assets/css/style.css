@@ -1,0 +1,23 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: silver;
+    font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+    font:bold;
+   
+  
+}
+
+h1 {
+    background-color: white;
+    padding: 20px;
+    font:48px;
+    text-align: center;
+
+}
+button {
+ border: 10px;
+ border-color: white;
+}
