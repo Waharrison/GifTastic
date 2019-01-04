@@ -1,4 +1,4 @@
-var topics = ["The Matrix", "The Notebook", "Pineapple Express", "The Lion King", "Frozen", "Tangled", "This is the End", "Ironman", "Ironman 2", "Thor", "The Avengers", "Titanic", "Aquaman", "Home Alone", "Dredd"];
+var topics = ["The Avengers", "Frozen", "Titanic", "The Matrix", "The Notebook", "Pineapple Express", "The Lion King", "Tangled", "This is the End", "Ironman", "Ironman 2", "Thor", "Aquaman", "Home Alone", "Dredd"];
 
 function renderButtons() {
     $("#movies-view").empty();
@@ -18,12 +18,12 @@ $("#add-movie").on("click", function (event) {
     renderButtons();
 });
 
+renderButtons();
 
-
-$("button").on("click", function () {
+$(document).on("click", ".btn", function () {
     var movie = $(this).attr("data-movie");
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        movie + "&api_key=dc6zaTOxFJmzC&limit=10";
+        movie + "&api_key=dc6zaTOxFJmzC&limit=20";
 
     $.ajax({
         url: queryURL,
@@ -32,72 +32,41 @@ $("button").on("click", function () {
         .then(function (response) {
             console.log(response)
             var results = response.data;
-
             for (var i = 0; i < results.length; i++) {
-                var gifDiv = $("<div class='col-md-4'");
+                var gifDiv = $("<div>");
                 var rating = results[i].rating;
                 var p = $("<p>").text("Rating: " + rating);
                 var movieImage = $("<img>");
-                movieImage.attr("src", results[i].images.fixed_height.url);
-                movieImage.attr("src", results[i].images.original_still.url);
-                movieImage.attr("data-still", results[i].images.original_still.url);
-                movieImage.attr("data-animate", results[i].images.original.url);
+                // movieImage.attr("src", results[i].images.fixed_width_small.url);
+                movieImage.attr("src", results[i].images.fixed_width_still.url);
+                movieImage.attr("data-still", results[i].images.fixed_width_still.url);
+                movieImage.attr("data-animate", results[i].images.fixed_width.url);
                 movieImage.attr("data-state", "still");
                 movieImage.attr("class", "gif");
                 movieImage.addClass("gif");
                 gifDiv.prepend(movieImage);
                 gifDiv.prepend(p);
                 $("#gifs-appear-here").prepend(gifDiv);
-                console.log(movieImage.results[i].images.original.url)
             }
         });
 });
 renderButtons();
-
-$(document).on("click", ".btn", function () {
-    var movie = $(this).attr("data-movie");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        movie + "&api_key=dc6zaTOxFJmzC&limit=10";
-
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
-        .then(function (response) {
-            console.log(response)
-            var results = response.data;
-
-
-            for (var i = 0; i < results.length; i++) {
-                var gifDiv = $("<div>");
-                var rating = results[i].rating;
-                var p = $("<p>").text("Rating: " + rating);
-                var movieImage = $("<img>");
-                movieImage.attr("src", results[i].images.fixed_height.url);
-                // movieImage.attr()
-                gifDiv.prepend(movieImage);
-                gifDiv.prepend(p);
-                $("#gifs-appear-here").prepend(gifDiv);
-            }
-        });
-
-});
-renderButtons();
-
-$(document).on("click", ".btn", function () {
-
+function changeState() {
     var state = $(this).attr("data-state");
     var animateImage = $(this).attr("data-animate");
     var stillImage = $(this).attr("data-still");
-
     if (state === "still") {
         $(this).attr("src", animateImage);
         $(this).attr("data-state", "animate");
     }
-
     else if (state === "animate") {
         $(this).attr("src", stillImage);
         $(this).attr("data-state", "still");
     }
-});
+    console.log("data-state")
+};
+
+$(document).on("click", ".gif", changeState);
+
+
 
